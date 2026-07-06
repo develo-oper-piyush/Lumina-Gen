@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { CENTER_NAV_LINKS, HERO_VIDEO_SRC } from "@/lib/constants";
+import demoImage from "@/public/demo.png";
 
 export function HomeHeroSection() {
 	return (
@@ -37,7 +38,7 @@ export function HomeHeroSection() {
 						</span>
 						<div className="min-w-0">
 							<span className="caps-2xs block text-sm font-semibold text-foreground">
-								Luma Studio
+								Lumina Gen
 							</span>
 							<span className="caps-xs block truncate text-xs uppercase text-muted-foreground">
 								AI image restyling
@@ -159,8 +160,8 @@ export function HomeHeroSection() {
 						<div className="hero-demo-glass home-demo-glass-shell">
 							<div className="hero-demo-glass-inner home-demo-inner">
 								<Image
-									src="/demo.png"
-									alt="Luma Studio workspace showing upload, curated styles, and a before-and-after preview"
+									src={demoImage}
+									alt="Lumina Gen workspace showing upload, curated styles, and a before-and-after preview"
 									width={3290}
 									height={1872}
 									className="h-auto w-full"
