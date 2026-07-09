@@ -46,7 +46,7 @@ export const CENTER_NAV_LINKS = [
 	{ label: "Styles", href: "#styles", chevron: true },
 	{ label: "How it works", href: "#how-it-works" },
 	{ label: "Privacy", href: "/privacy" },
-	{ label: "FAQ", href: "#faq" },
+	{ label: "FAQs", href: "/faqs" },
 ] as const;
 
 export const FOOTER_QUICK_LINKS = [
