@@ -163,7 +163,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
 	{
 		step: "Step 3",
 		title: "Generate the transformation",
-		body: "Luma restyles the image while protecting composition, identity cues, and the small details that matter.",
+		body: "Lumina Gen restyles the image while protecting composition, identity cues, and the small details that matter.",
 		icon: SparklesIcon,
 		featured: true,
 	},

@@ -61,7 +61,7 @@ export function StylePresetCard({
 			type="button"
 			onClick={onSelect}
 			className={cn(
-				"studio-panel-inset group relative overflow-hidden rounded-[1.85rem] border text-left",
+				"studio-panel-inset cursor-pointer select-none group relative overflow-hidden rounded-[1.85rem] border text-left",
 				isSelected
 					? "studio-preset-card-selected"
 					: "studio-preset-card",

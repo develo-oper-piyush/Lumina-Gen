@@ -29,7 +29,7 @@ export function HomeHeroSection() {
 						<span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
 							<Image
 								src="/logo.png"
-								alt="Luma Studio"
+								alt="Lumina Gen"
 								width={72}
 								height={72}
 								className="h-10 w-10 max-h-none max-w-none origin-left scale-[1.55] object-cover"
