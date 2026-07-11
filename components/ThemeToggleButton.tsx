@@ -26,7 +26,7 @@ export function ThemeToggleButton() {
 			variant="outline"
 			size="icon"
 			onClick={() => setTheme(isDark ? "light" : "dark")}
-			className="fixed right-8 top-8 z-50 rounded-full border-border/60 bg-background/70 backdrop-blur-sm"
+			className="fixed right-1 top-5 z-50 rounded-full border-border/60 bg-background/70 backdrop-blur-sm"
 			aria-label="Toggle color theme"
 			title={isDark ? "Switch to light mode" : "Switch to dark mode"}
 		>

@@ -10,7 +10,6 @@
 		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
-		"@ai-sdk/openai": "^4.0.9",
 		"@base-ui/react": "^1.6.0",
 		"@clerk/nextjs": "^7.5.12",
 		"@clerk/themes": "^2.4.57",
@@ -18,8 +17,7 @@
 		"@imagekit/next": "^2.1.5",
 		"@imagekit/nodejs": "^7.9.1",
 		"@neondatabase/serverless": "^1.1.0",
-		"@sentry/nextjs": "^10.63.0",
-		"ai": "^7.0.18",
+		"@sentry/nextjs": "^10.65.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"drizzle-orm": "^0.45.2",

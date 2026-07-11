@@ -18,9 +18,9 @@ export const BILLING_PLAN_KEYS = {
 
 // Type object for limits of generations
 export const MONTHLY_GENERATION_LIMITS = {
-	free: 10,
-	pro: 50,
-	studio: 100,
+	free: 1,
+	pro: 90,
+	studio: 190,
 } as const;
 
 // This functions is going to check which plan is user subscribed to and will return that number of limits

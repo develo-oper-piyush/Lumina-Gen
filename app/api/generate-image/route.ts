@@ -6,19 +6,15 @@ import {
 import { getMonthlyGenerationLimit } from "@/lib/generation-quota";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
 
 import * as Sentry from "@sentry/nextjs";
-import { openaiProvider } from "@/lib/openai";
 import { ACCEPTED_SOURCE_IMAGE_MIME_TYPES } from "@/lib/constants";
 import { getStylePreset } from "@/lib/style-presets";
-
-import { APICallError, generateImage, NoImageGeneratedError } from "ai";
 import { uploadBufferToImageKit } from "@/lib/imagekit";
 
 export const runtime = "nodejs";
 
-type EditImageSize = "1024x1024" | "1536x1024" | "1024x1536";
+const STABILITY_API_BASE = "https://api.stability.ai";
 
 type GenerateImageRequest = {
 	sourceImageUrl?: string;
@@ -28,33 +24,19 @@ type GenerateImageRequest = {
 	model?: string;
 };
 
-/**
- * inferImageSize reads width and height from the uploaded image (via sharp), computes aspect ratio,
- * and returns one of the allowed `size` values for OpenAI image edits.
- */
-async function inferImageSize(imageBuffer: Buffer): Promise<EditImageSize> {
-	try {
-		const metadata = await sharp(imageBuffer).metadata();
-
-		if (!metadata.width || !metadata.height) {
-			return "1024x1024";
-		}
-
-		const aspectRatio = metadata.width / metadata.height;
-
-		if (aspectRatio > 1.08) return "1536x1024"; // this means that the input image is wider than it is tall
-		if (aspectRatio < 0.92) return "1024x1536"; // this means that the input image is taller than it is wide
-		return "1024x1024"; // this means that the input image is square
-	} catch {
-		return "1024x1024";
-	}
-}
-
 export async function POST(request: Request) {
 	const { userId, has } = await auth();
 
 	if (!userId) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	}
+
+	const apiKey = process.env.STABILITY_API_KEY;
+	if (!apiKey) {
+		return NextResponse.json(
+			{ error: "Missing STABILITY_API_KEY." },
+			{ status: 500 },
+		);
 	}
 
 	const monthlyLimit = getMonthlyGenerationLimit(has);
@@ -74,13 +56,6 @@ export async function POST(request: Request) {
 				used: usedThisMonth,
 			},
 			{ status: 429 },
-		);
-	}
-
-	if (!openaiProvider) {
-		return NextResponse.json(
-			{ error: "Missing OPENAI_API_KEY." },
-			{ status: 500 },
 		);
 	}
 
@@ -133,6 +108,7 @@ export async function POST(request: Request) {
 		);
 	}
 
+	// Fetch the source image
 	const imageResponse = await fetch(sourceImageUrl);
 	if (!imageResponse.ok) {
 		return NextResponse.json(
@@ -142,7 +118,6 @@ export async function POST(request: Request) {
 	}
 
 	const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
-	const imageSize = await inferImageSize(imageBuffer);
 
 	const prompt = [
 		preset.prompt,
@@ -150,11 +125,9 @@ export async function POST(request: Request) {
 	].join("\n\n");
 
 	try {
-		// generateImage =>
-
-		const result = await Sentry.startSpan(
+		const imageBase64 = await Sentry.startSpan(
 			{
-				name: `image edit ${model}`,
+				name: `stability image-to-image ${model}`,
 				op: "gen_ai.request",
 				attributes: {
 					"gen_ai.request.model": model,
@@ -169,42 +142,48 @@ export async function POST(request: Request) {
 				},
 			},
 			async (span) => {
-				const out = await generateImage({
-					model: openaiProvider!.imageModel(model),
-					prompt: {
-						images: [imageBuffer],
-						text: prompt,
-					},
-					size: imageSize,
-					providerOptions: {
-						openai: {
-							input_fidelity: "high", // this means that the input image is used as a reference for the generation,
-							quality: "medium", // this means that the output image is of medium quality
-							output_format: "png",
-							user: userId,
-						},
-					},
+				// Build multipart/form-data for Stability AI v2beta SD3 image-to-image
+				const formData = new FormData();
+				formData.append("mode", "image-to-image");
+				formData.append("model", model);
+				formData.append("prompt", prompt);
+				formData.append("strength", "0.75"); // how strongly to restyle (0=original, 1=full restyle)
+				formData.append("output_format", "png");
+
+				// Attach the source image as a Blob
+				const imageBlob = new Blob([imageBuffer], {
+					type: sourceMimeType,
 				});
+				formData.append("image", imageBlob, "source.png");
 
-				const u = out.usage;
+				const stabilityResponse = await fetch(
+					`${STABILITY_API_BASE}/v2beta/stable-image/generate/sd3`,
+					{
+						method: "POST",
+						headers: {
+							Authorization: `Bearer ${apiKey}`,
+							Accept: "application/json",
+						},
+						body: formData,
+					},
+				);
 
-				if (u.inputTokens != null) {
-					span.setAttribute(
-						"gen_ai.usage.input_tokens",
-						u.inputTokens,
+				if (!stabilityResponse.ok) {
+					const errText = await stabilityResponse.text();
+					throw new Error(
+						`Stability AI error ${stabilityResponse.status}: ${errText}`,
 					);
 				}
 
-				if (u.outputTokens != null) {
-					span.setAttribute(
-						"gen_ai.usage.output_tokens",
-						u.outputTokens,
-					);
-				}
-				if (u.totalTokens != null) {
-					span.setAttribute(
-						"gen_ai.usage.total_tokens",
-						u.totalTokens,
+				const stabilityData = (await stabilityResponse.json()) as {
+					image: string;
+					finish_reason?: string;
+					seed?: number;
+				};
+
+				if (!stabilityData.image) {
+					throw new Error(
+						"Stability AI did not return an image in the response.",
 					);
 				}
 
@@ -215,11 +194,9 @@ export async function POST(request: Request) {
 					]),
 				);
 
-				return out;
+				return stabilityData.image; // base64 string
 			},
 		);
-
-		const imageBase64 = result.image.base64;
 
 		const resultBuffer = Buffer.from(imageBase64, "base64");
 
@@ -259,21 +236,14 @@ export async function POST(request: Request) {
 	} catch (error) {
 		console.error("generate-image route failed", error);
 
-		if (APICallError.isInstance(error)) {
+		if (error instanceof Error) {
 			return NextResponse.json(
 				{
 					error:
 						error.message ||
 						"Image generation failed. Please try again.",
 				},
-				{ status: error.statusCode ?? 500 },
-			);
-		}
-
-		if (NoImageGeneratedError.isInstance(error)) {
-			return NextResponse.json(
-				{ error: "The model did not return an image." },
-				{ status: 502 },
+				{ status: 500 },
 			);
 		}
 

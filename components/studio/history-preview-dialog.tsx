@@ -4,9 +4,9 @@ import { DownloadIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
-	openAiImageModelLabels,
-	type OpenAiImageModel,
-} from "@/lib/openai-image-models";
+	stabilityImageModelLabels,
+	type StabilityImageModel,
+} from "@/lib/stability-image-models";
 import { downloadImageFromUrl, formatHistoryDate } from "@/lib/utils";
 import { GenerationHistorySummaryItem } from "@/lib/types";
 
@@ -61,8 +61,8 @@ export function HistoryPreviewDialog({
 							<HistoryMetaRow
 								label="Model"
 								value={
-									openAiImageModelLabels[
-										item.model as OpenAiImageModel
+									stabilityImageModelLabels[
+										item.model as StabilityImageModel
 									] ?? item.model
 								}
 							/>

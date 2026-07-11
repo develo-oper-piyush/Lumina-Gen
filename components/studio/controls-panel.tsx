@@ -2,24 +2,38 @@
 
 import Link from "next/link";
 import {
-	ChevronDownIcon,
 	RefreshCcwIcon,
 	SparklesIcon,
 	UploadIcon,
+	ZapIcon,
+	StarIcon,
+	GaugeIcon,
 } from "lucide-react";
 
 import {
-	openAiImageModels,
-	openAiImageModelLabels,
-	type OpenAiImageModel,
-} from "@/lib/openai-image-models";
+	stabilityImageModels,
+	stabilityImageModelLabels,
+	type StabilityImageModel,
+} from "@/lib/stability-image-models";
 import { stylePresets } from "@/lib/style-presets";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { useStudioWorkbench } from "@/context/StudioWorkbenchContext";
 import { GenerateButton, StylePresetCard } from "./workbench-ui";
+
+const modelIcons: Record<StabilityImageModel, React.ReactNode> = {
+	"sd3-large-turbo": <ZapIcon className="size-4" />,
+	"sd3-large": <StarIcon className="size-4" />,
+	"sd3-medium": <GaugeIcon className="size-4" />,
+};
+
+const modelDescriptions: Record<StabilityImageModel, string> = {
+	"sd3-large-turbo": "Fastest generation. Great for previews.",
+	"sd3-large": "Highest quality output. Recommended.",
+	"sd3-medium": "Balanced speed & quality.",
+};
 
 export function StudioControlsPanel() {
 	const {
@@ -150,36 +164,45 @@ export function StudioControlsPanel() {
 			<div className="studio-panel-inset mt-7 rounded-[1.8rem] border p-5">
 				<div className="flex items-center justify-between gap-3">
 					<p className="text-[1.05rem] font-semibold text-foreground">
-						3. OpenAI model
+						3. Stability AI model
 					</p>
 					<SparklesIcon className="size-4 text-primary" />
 				</div>
 
-				<div className="mt-4 relative">
-					<select
-						value={selectedModel}
-						onChange={(event) =>
-							selectModel(event.target.value as OpenAiImageModel)
-						}
-						className={cn(
-							buttonVariants({ variant: "outline" }),
-							"h-auto w-full appearance-none rounded-[1.2rem] border-border/35 bg-background/25 px-4 py-3 pr-11 font-medium focus:border-primary",
-						)}
-					>
-						{openAiImageModels.map((model) => (
-							<option key={model} value={model}>
-								{openAiImageModelLabels[model]}
-							</option>
-						))}
-					</select>
-
-					<ChevronDownIcon className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+				<div className="mt-4 grid gap-3 sm:grid-cols-3">
+					{stabilityImageModels.map((model) => (
+						<button
+							key={model}
+							type="button"
+							onClick={() => selectModel(model)}
+							className={cn(
+								"flex flex-col gap-1.5 rounded-[1.2rem] border px-4 py-3 text-left transition-all duration-150",
+								selectedModel === model
+									? "border-primary bg-primary/10 text-foreground"
+									: "studio-pill border-border/35 bg-background/25 text-muted-foreground hover:border-border/70 hover:text-foreground",
+							)}
+						>
+							<span
+								className={cn(
+									"flex items-center gap-2 text-sm font-semibold",
+									selectedModel === model
+										? "text-primary"
+										: "text-foreground",
+								)}
+							>
+								{modelIcons[model]}
+								{stabilityImageModelLabels[model]}
+							</span>
+							<span className="text-xs leading-snug text-muted-foreground">
+								{modelDescriptions[model]}
+							</span>
+						</button>
+					))}
 				</div>
 
 				<p className="mt-3 text-sm leading-6 text-muted-foreground">
-					Only image-edit-capable OpenAI models are shown here, so
-					generation stays compatible with your uploaded-image
-					workflow.
+					Powered by Stability AI SD3. All models support
+					image-to-image style transfer with your uploaded photo.
 				</p>
 			</div>
 
@@ -194,7 +217,7 @@ export function StudioControlsPanel() {
 			/>
 
 			<p className="mt-5 text-center text-lg text-muted-foreground">
-				Styling is powered by OpenAI image edits.
+				Styling is powered by Stability AI SD3.
 			</p>
 
 			{error ? (

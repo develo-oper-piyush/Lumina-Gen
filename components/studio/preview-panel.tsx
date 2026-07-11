@@ -66,8 +66,8 @@ export function StudioPreviewPanel() {
 			<div className="mt-6 flex items-start gap-3 text-lg text-muted-foreground">
 				<CircleDotIcon className="mt-1 size-5 shrink-0 text-primary" />
 				<p>
-					The result is generated directly with an OpenAI style
-					transfer.
+					The result is generated directly with a Stability AI SD3
+					style transfer.
 				</p>
 			</div>
 
