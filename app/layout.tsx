@@ -69,6 +69,13 @@ export const metadata: Metadata = {
 			"Upload a photo, pick a style, get a gallery-ready AI result. Powered by Stability AI SD3.",
 		creator: "@luminagen",
 	},
+	icons: {
+		icon: [
+			{ url: "/logo.png", type: "image/png" },
+		],
+		shortcut: "/logo.png",
+		apple: "/logo.png",
+	},
 };
 
 export default function RootLayout({
@@ -78,9 +85,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head>
-				<link rel="icon" href="/logo.png" />
-			</head>
 			<body
 				className={`${plusJakartaSans.variable} ${lora.variable} ${ibmPlexMono.variable} antialiased`}
 			>
