@@ -59,9 +59,9 @@ function Button({
 	if (asChild && React.isValidElement(children)) {
 		return React.cloneElement(children, {
 			...props,
-			className: cn(resolvedClassName, children.props.className),
+			className: cn(resolvedClassName, (children.props as Record<string, unknown>).className as string | undefined),
 			"data-slot": "button",
-		});
+		} as React.HTMLAttributes<HTMLElement>);
 	}
 
 	return (
