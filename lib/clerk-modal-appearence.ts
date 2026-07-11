@@ -3,111 +3,122 @@ import { dark } from "@clerk/themes";
 /**
  * Dark theme for Clerk modals (sign-in, sign-up) that matches the app's color palette.
  * Uses Clerk's prebuilt `dark` theme as a base, then overrides variables to match
- * this app's `.dark` palette from `app/globals.css` with the same orange primary color.
+ * the designbyte emerald theme from `app/globals.css`.
  *
  * @see https://clerk.com/docs/guides/customizing-clerk/appearance-prop/themes
  * @see https://clerk.com/docs/guides/customizing-clerk/appearance-prop/variables
  */
+
+// Emerald primary — oklch(0.8545 0.1675 159.6564)
+const PRIMARY = "oklch(0.8545 0.1675 159.6564)";
+const PRIMARY_FG = "oklch(0 0 0)";
+const BG = "oklch(0.1448 0 0)";      // --card dark (slightly lighter than pure black)
+const FG = "oklch(0.9551 0 0)";      // --foreground dark
+const CARD = "oklch(0.1448 0 0)";    // --card dark
+const INPUT = "oklch(0.3523 0 0)";   // --input dark
+const BORDER = "oklch(0.2138 0.0019 286.2347)"; // --border dark
+const MUTED = "oklch(0.2653 0.0037 286.1465)";  // --muted dark
+const MUTED_FG = "oklch(0.6731 0 0)";           // --muted-foreground dark
+const SECONDARY = "oklch(0.4700 0.0900 160.0079)"; // --secondary dark (green tint)
+const ACCENT = "oklch(0.3004 0.0609 159.8938)";    // --accent dark
+
 export const clerkModalAppearance = {
 	theme: dark,
 	variables: {
-		// Primary brand color - matches the app's primary color
-		colorPrimary: "oklch(0.7357 0.1641 34.7091)",
-		colorPrimaryForeground: "oklch(1 0 0)",
+		// Primary brand color — emerald green
+		colorPrimary: PRIMARY,
+		colorPrimaryForeground: PRIMARY_FG,
 
-		// Background and foreground colors - matches the app's dark theme
-		colorBackground: "oklch(0.3184 0.0176 341.4465)",
-		colorForeground: "oklch(0.9397 0.0119 51.3156)",
+		// Background and foreground
+		colorBackground: BG,
+		colorForeground: FG,
 
-		// Card and surface colors - matches the app's card colors
-		colorCard: "oklch(0.3184 0.0176 341.4465)",
-		colorCardForeground: "oklch(0.9397 0.0119 51.3156)",
+		// Card surface
+		colorCard: CARD,
+		colorCardForeground: FG,
 
-		// Input field colors - matches the app's input colors
-		colorInput: "oklch(0.3637 0.0203 342.2664)",
-		colorInputForeground: "oklch(0.9397 0.0119 51.3156)",
+		// Input fields
+		colorInput: INPUT,
+		colorInputForeground: FG,
 
-		// Secondary colors - matches the app's secondary colors
-		colorSecondary: "oklch(0.3637 0.0203 342.2664)",
-		colorSecondaryForeground: "oklch(0.9397 0.0119 51.3156)",
+		// Secondary
+		colorSecondary: SECONDARY,
+		colorSecondaryForeground: FG,
 
-		// Muted colors for subtle elements
-		colorMuted: "oklch(0.2848 0.0159 343.6554)",
-		colorMutedForeground: "oklch(0.8378 0.0237 52.6346)",
+		// Muted
+		colorMuted: MUTED,
+		colorMutedForeground: MUTED_FG,
 
-		// Accent colors
-		colorAccent: "oklch(0.8278 0.1131 57.9984)",
-		colorAccentForeground: "oklch(0.2569 0.0169 352.4042)",
+		// Accent
+		colorAccent: ACCENT,
+		colorAccentForeground: FG,
 
-		// Border colors
-		colorBorder: "oklch(0.3637 0.0203 342.2664)",
+		// Borders and ring
+		colorBorder: BORDER,
+		colorRing: PRIMARY,
 
-		// Shadow and ring colors
-		colorRing: "oklch(0.7357 0.1641 34.7091)",
-
-		// Typography
+		// Typography — Plus Jakarta Sans to match theme
 		fontFamily:
-			"Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+			"'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
 
-		// Border radius to match app's design
-		borderRadius: "0.625rem",
-		borderRadiusSmall: "0.375rem",
-		borderRadiusLarge: "0.875rem",
+		// Border radius — matches --radius: 1.4rem
+		borderRadius: "1rem",
+		borderRadiusSmall: "0.6rem",
+		borderRadiusLarge: "1.4rem",
 	},
 	elements: {
-		// Ensure consistent spacing and typography
 		formButtonPrimary: {
-			backgroundColor: "oklch(0.7357 0.1641 34.7091)",
-			color: "oklch(1 0 0)",
+			backgroundColor: PRIMARY,
+			color: PRIMARY_FG,
 			"&:hover": {
-				backgroundColor: "oklch(0.68 0.1641 34.7091)",
+				backgroundColor: "oklch(0.78 0.1675 159.6564)",
 			},
 			"&:active": {
-				backgroundColor: "oklch(0.63 0.1641 34.7091)",
+				backgroundColor: "oklch(0.72 0.1675 159.6564)",
 			},
 		},
 		formButtonReset: {
-			backgroundColor: "oklch(0.3637 0.0203 342.2664)",
-			color: "oklch(0.9397 0.0119 51.3156)",
-			borderColor: "oklch(0.3637 0.0203 342.2664)",
+			backgroundColor: SECONDARY,
+			color: FG,
+			borderColor: BORDER,
 			"&:hover": {
-				backgroundColor: "oklch(0.4 0.0203 342.2664)",
+				backgroundColor: "oklch(0.52 0.09 160)",
 			},
 		},
 		card: {
-			backgroundColor: "oklch(0.3184 0.0176 341.4465)",
-			borderColor: "oklch(0.3637 0.0203 342.2664)",
+			backgroundColor: CARD,
+			borderColor: BORDER,
 		},
 		headerTitle: {
-			color: "oklch(0.9397 0.0119 51.3156)",
+			color: FG,
 			fontFamily:
-				"Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+				"'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
 		},
 		headerSubtitle: {
-			color: "oklch(0.8378 0.0237 52.6346)",
+			color: MUTED_FG,
 		},
 		socialButtonsBlockButton: {
-			backgroundColor: "oklch(0.3637 0.0203 342.2664)",
-			color: "oklch(0.9397 0.0119 51.3156)",
-			borderColor: "oklch(0.3637 0.0203 342.2664)",
+			backgroundColor: SECONDARY,
+			color: FG,
+			borderColor: BORDER,
 			"&:hover": {
-				backgroundColor: "oklch(0.4 0.0203 342.2664)",
+				backgroundColor: "oklch(0.52 0.09 160)",
 			},
 		},
 		formFieldInput: {
-			backgroundColor: "oklch(0.3637 0.0203 342.2664)",
-			color: "oklch(0.9397 0.0119 51.3156)",
-			borderColor: "oklch(0.3637 0.0203 342.2664)",
+			backgroundColor: INPUT,
+			color: FG,
+			borderColor: BORDER,
 			"&:focus": {
-				borderColor: "oklch(0.7357 0.1641 34.7091)",
-				boxShadow: "0 0 0 1px oklch(0.7357 0.1641 34.7091)",
+				borderColor: PRIMARY,
+				boxShadow: `0 0 0 1px ${PRIMARY}`,
 			},
 		},
 		footerActionLink: {
-			color: "oklch(0.7357 0.1641 34.7091)",
+			color: PRIMARY,
 			"&:hover": {
-				color: "oklch(0.68 0.1641 34.7091)",
+				color: "oklch(0.78 0.1675 159.6564)",
 			},
 		},
 	},
-} as const;
+};

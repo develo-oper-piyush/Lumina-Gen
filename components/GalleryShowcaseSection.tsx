@@ -19,13 +19,15 @@ export function GalleryShowcaseSection() {
 			className="section-shell relative mt-6 overflow-hidden px-5 py-14 sm:px-8 sm:py-18 lg:px-12 lg:py-20"
 		>
 			<video
-				className="hero-video pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center"
+				className="hero-video pointer-events-none absolute inset-0 z-0 h-full w-full object-cover object-center opacity-80"
 				autoPlay
 				loop
 				muted
 				playsInline
 				preload="auto"
 				aria-hidden
+				width={1280}
+				height={720}
 			>
 				<source src={SHOWCASE_BG_VIDEO_SRC} type="video/mp4" />
 			</video>

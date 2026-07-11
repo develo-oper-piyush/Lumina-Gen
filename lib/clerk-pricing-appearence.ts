@@ -2,8 +2,8 @@ import { dark } from "@clerk/themes";
 
 /**
  * Dark + brand colors for `<PricingTable />` and billing checkout.
- * Uses Clerk’s prebuilt `dark` theme, then overrides variables to match
- * this app’s `.dark` palette (see `app/globals.css`) and orange primary.
+ * Uses Clerk's prebuilt `dark` theme, then overrides variables to match
+ * the designbyte emerald theme (see `app/globals.css`).
  *
  * @see https://clerk.com/docs/guides/customizing-clerk/appearance-prop/themes
  * @see https://clerk.com/docs/guides/customizing-clerk/appearance-prop/variables
@@ -11,12 +11,16 @@ import { dark } from "@clerk/themes";
 export const clerkPricingAppearance = {
 	theme: dark,
 	variables: {
-		colorPrimary: "oklch(0.7357 0.1641 34.7091)",
-		colorPrimaryForeground: "oklch(1 0 0)",
-		colorBackground: "oklch(0.3184 0.0176 341.4465)",
-		colorForeground: "oklch(0.9397 0.0119 51.3156)",
-		colorInput: "oklch(0.3637 0.0203 342.2664)",
-		colorInputForeground: "oklch(0.9397 0.0119 51.3156)",
-		colorNeutral: "oklch(0.8378 0.0237 52.6346)",
+		// Emerald/mint primary — matches --primary in globals.css
+		colorPrimary: "oklch(0.8545 0.1675 159.6564)",
+		colorPrimaryForeground: "oklch(0 0 0)",
+		// Pure-black dark background — matches --background dark
+		colorBackground: "oklch(0.1448 0 0)",
+		colorForeground: "oklch(0.9551 0 0)",
+		// Input surface — matches --input dark
+		colorInput: "oklch(0.3523 0 0)",
+		colorInputForeground: "oklch(0.9551 0 0)",
+		// Neutral muted tone
+		colorNeutral: "oklch(0.6731 0 0)",
 	},
-} as const;
+};

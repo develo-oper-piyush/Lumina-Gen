@@ -29,13 +29,13 @@ async function StudioPage() {
 			<div className="mx-auto max-w-[1440px]">
 				<header className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
 					<Link href="/" className="flex min-w-0 items-center gap-3">
-						<span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
+						<span className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-visible">
 							<Image
 								src="/logo.png"
 								alt="Lumina Gen"
-								width={72}
-								height={72}
-								className="mt-2 mr-2 max-h-none max-w-none origin-left scale-[1.55] object-cover"
+								width={56}
+								height={56}
+								className="mt-1 mr-1 max-h-none max-w-none origin-left scale-[1.2] object-cover"
 								priority
 							/>
 						</span>

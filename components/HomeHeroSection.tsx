@@ -12,12 +12,14 @@ export function HomeHeroSection() {
 		<section className="home-hero">
 			<div className="hero-surface absolute inset-0 z-10" />
 			<video
-				className="hero-video absolute inset-0 h-full w-full object-cover object-center"
+				className="hero-video absolute inset-0 h-full w-full object-cover object-center opacity-80"
 				autoPlay
 				loop
 				muted
 				playsInline
 				preload="auto"
+				width={1280}
+				height={720}
 			>
 				<source src={HERO_VIDEO_SRC} type="video/mp4" />
 			</video>
@@ -26,13 +28,13 @@ export function HomeHeroSection() {
 			<div className="home-hero-stack">
 				<nav className="hero-pill home-nav">
 					<Link href="/" className="home-brand">
-						<span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
+						<span className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-visible">
 							<Image
 								src="/logo.png"
 								alt="Lumina Gen"
-								width={72}
-								height={72}
-								className="h-10 w-10 max-h-none max-w-none origin-left scale-[1.55] object-cover"
+								width={56}
+								height={56}
+								className="mt-1 mr-1 max-h-none max-w-none origin-left scale-[1] object-cover"
 								priority
 							/>
 						</span>

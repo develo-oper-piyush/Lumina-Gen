@@ -84,7 +84,7 @@ export function StylePresetCard({
 				) : null}
 
 				<div className="absolute inset-x-0 bottom-0 px-5 pb-5 pt-8">
-					<p className="text-[1.05rem] font-semibold text-primary-foreground drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-[1.15rem]">
+					<p className="text-[1.05rem] font-semibold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-[1.15rem]">
 						{label}
 					</p>
 				</div>
