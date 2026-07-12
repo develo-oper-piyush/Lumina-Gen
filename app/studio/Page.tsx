@@ -11,18 +11,31 @@ import Image from "next/image";
 import Link from "next/link";
 
 async function StudioPage() {
-	const { userId, has } = await auth();
-	const initialHistory = userId
-		? await listUserGenerationSummaries(userId)
-		: [];
-	const initialQuota =
-		userId != null
-			? await getGenerationQuotaSnapshot(has, userId)
-			: {
-					limit: MONTHLY_GENERATION_LIMITS.free,
-					used: 0,
-					remaining: MONTHLY_GENERATION_LIMITS.free,
-				};
+	let userId: string | null = null;
+	let initialHistory: Awaited<ReturnType<typeof listUserGenerationSummaries>> = [];
+	let initialQuota = {
+		limit: MONTHLY_GENERATION_LIMITS.free,
+		used: 0,
+		remaining: MONTHLY_GENERATION_LIMITS.free,
+	};
+	let setupError: string | null = null;
+
+	try {
+		const authResult = await auth();
+		userId = authResult.userId;
+		const { has } = authResult;
+
+		if (userId) {
+			[initialHistory, initialQuota] = await Promise.all([
+				listUserGenerationSummaries(userId),
+				getGenerationQuotaSnapshot(has, userId),
+			]);
+		}
+	} catch (err) {
+		console.error("[StudioPage] Setup error:", err);
+		setupError =
+			err instanceof Error ? err.message : "Studio failed to load.";
+	}
 
 	return (
 		<main className="studio-shell min-h-screen px-4 py-4 sm:px-6 lg:px-8">
@@ -60,6 +73,13 @@ async function StudioPage() {
 						</div>
 					</div>
 				</header>
+
+				{setupError && (
+					<div className="mb-6 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+						<strong>Studio setup error:</strong> {setupError}
+						<span className="ml-2 opacity-70">— Check your Vercel environment variables (DATABASE_URL, etc.)</span>
+					</div>
+				)}
 
 				<StudioWorkbench
 					clerkUserId={userId ?? ""}
