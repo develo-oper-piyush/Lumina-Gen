@@ -13,11 +13,11 @@ import Link from "next/link";
 async function StudioPage() {
 	let userId: string | null = null;
 	let initialHistory: Awaited<ReturnType<typeof listUserGenerationSummaries>> = [];
-	let initialQuota = {
+	let initialQuota: Awaited<ReturnType<typeof getGenerationQuotaSnapshot>> = {
 		limit: MONTHLY_GENERATION_LIMITS.free,
 		used: 0,
 		remaining: MONTHLY_GENERATION_LIMITS.free,
-	};
+	} as Awaited<ReturnType<typeof getGenerationQuotaSnapshot>>;
 	let setupError: string | null = null;
 
 	try {
